@@ -81,7 +81,13 @@ const FloatingIcon = ({ children }: { children: React.ReactNode }) => (
 export default function Birthday() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 to-purple-600 flex flex-col items-center justify-center p-4">
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0">
+        {[...Array(20)].map((_, i) => (
+          <FloatingIcon key={i}>{i % 3 === 0 ? <Heart size={24} /> : <Gift size={24} />}</FloatingIcon>
+        ))}
+      </div>
+
+      <div className="absolute right-0 bottom-0">
         {[...Array(20)].map((_, i) => (
           <FloatingIcon key={i}>{i % 3 === 0 ? <Heart size={24} /> : <Gift size={24} />}</FloatingIcon>
         ))}
