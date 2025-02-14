@@ -4,12 +4,9 @@ import { motion } from 'framer-motion'
 import { Cake, Gift, Heart, Clock } from 'lucide-react'
 
 const Countdown: React.FC = () => {
-  // ฟังก์ชันคำนวณเวลาที่เหลือจนถึงวันที่ 11 มีนาคม
   const calculateTimeLeft = () => {
     const now = new Date()
-    // กำหนดวันที่ 11 มีนาคมของปีปัจจุบัน
     let eventDate = new Date(now.getFullYear(), 2, 11)
-    // ถ้าวันนี้ผ่านแล้ว ให้เปลี่ยนไปปีถัดไป
     if (now > eventDate) {
       eventDate = new Date(now.getFullYear() + 1, 2, 11)
     }
@@ -36,10 +33,9 @@ const Countdown: React.FC = () => {
     return () => clearTimeout(timer)
   })
 
-  // แสดงผลตัวนับถอยหลัง
   return (
     <motion.div
-      className="flex justify-center gap-4 my-8"
+      className="flex justify-center gap-2 my-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
@@ -56,8 +52,8 @@ const Countdown: React.FC = () => {
 }
 
 const TimeUnit = ({ value, label }: { value: number; label: string }) => (
-  <motion.div className="bg-white bg-opacity-10 p-4 rounded-lg backdrop-blur-sm" whileHover={{ scale: 1.05 }}>
-    <div className="text-4xl font-bold text-purple-200">{value.toString().padStart(2, '0')}</div>
+  <motion.div className="bg-white bg-opacity-10 p-3 rounded-lg backdrop-blur-sm" whileHover={{ scale: 1.05 }}>
+    <div className=" text-4xl font-bold text-purple-200">{value.toString().padStart(2, '0')}</div>
     <div className="text-sm text-purple-100">{label}</div>
   </motion.div>
 )
@@ -94,14 +90,14 @@ export default function Birthday() {
       </div>
 
       <motion.div
-        className="relative z-10 text-center"
+        className="relative z-10 text-center px-4 sm:px-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
         <Cake className="mx-auto mb-4 text-purple-200" size={48} />
-        <h1 className="text-5xl font-bold text-white mb-2">Happy Birthday Alice!</h1>
-        <p className="text-xl text-purple-200 mb-8">March 11, 2025</p>
+        <h1 className="text-3xl sm:text-5xl font-bold text-white mb-2">Happy Birthday Alice!</h1>
+        <p className="text-lg sm:text-xl text-purple-200 mb-8">March 11, 2025</p>
 
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3 }} className="inline-block">
           <Clock className="text-purple-200 mx-auto mb-4" size={32} />
