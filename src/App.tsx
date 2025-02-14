@@ -1,11 +1,7 @@
 import Birthday from './components/Birthday'
 
 const App = () => {
-  return (
-    <>
-      <Birthday />
-    </>
-  )
+  return <Birthday />
 }
 
 export default App

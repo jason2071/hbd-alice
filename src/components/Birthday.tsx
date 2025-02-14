@@ -3,41 +3,55 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Cake, Gift, Heart, Clock } from 'lucide-react'
 
-const CountdownTimer = () => {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  })
+const Countdown: React.FC = () => {
+  // ฟังก์ชันคำนวณเวลาที่เหลือจนถึงวันที่ 11 มีนาคม
+  const calculateTimeLeft = () => {
+    const now = new Date()
+    // กำหนดวันที่ 11 มีนาคมของปีปัจจุบัน
+    let eventDate = new Date(now.getFullYear(), 2, 11)
+    // ถ้าวันนี้ผ่านแล้ว ให้เปลี่ยนไปปีถัดไป
+    if (now > eventDate) {
+      eventDate = new Date(now.getFullYear() + 1, 2, 11)
+    }
+    const difference = eventDate.getTime() - now.getTime()
+    let timeLeft = {} as { days: number; hours: number; minutes: number; seconds: number }
+
+    if (difference > 0) {
+      timeLeft = {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+      }
+    }
+    return timeLeft
+  }
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft())
 
   useEffect(() => {
-    const target = new Date('2025-03-11T00:00:00')
-
-    const timer = setInterval(() => {
-      const now = new Date()
-      const difference = target.getTime() - now.getTime()
-
-      if (difference > 0) {
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24))
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000)
-
-        setTimeLeft({ days, hours, minutes, seconds })
-      }
+    const timer = setTimeout(() => {
+      setTimeLeft(calculateTimeLeft())
     }, 1000)
+    return () => clearTimeout(timer)
+  })
 
-    return () => clearInterval(timer)
-  }, [])
-
+  // แสดงผลตัวนับถอยหลัง
   return (
-    <div className="flex justify-center gap-4 my-8">
-      <TimeUnit value={timeLeft.days} label="Days" />
-      <TimeUnit value={timeLeft.hours} label="Hours" />
-      <TimeUnit value={timeLeft.minutes} label="Minutes" />
-      <TimeUnit value={timeLeft.seconds} label="Seconds" />
-    </div>
+    <motion.div
+      className="flex justify-center gap-4 my-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+    >
+      {Object.keys(timeLeft).length > 0 ? (
+        Object.entries(timeLeft).map(([unit, value]) => (
+          <TimeUnit key={unit} value={value} label={unit.charAt(0).toUpperCase() + unit.slice(1)} />
+        ))
+      ) : (
+        <span className="text-2xl font-medium">Time's up!</span>
+      )}
+    </motion.div>
   )
 }
 
@@ -87,7 +101,7 @@ export default function Birthday() {
           <Clock className="text-purple-200 mx-auto mb-4" size={32} />
         </motion.div>
 
-        <CountdownTimer />
+        <Countdown />
       </motion.div>
     </div>
   )
